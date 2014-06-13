@@ -43,6 +43,7 @@ import javax.swing.text.Document;
 import javax.swing.text.Style;
 import javax.swing.text.StyledDocument;
 
+import com.cfranc.irc.IfClientServerProtocol;
 import com.cfranc.irc.client.IfSenderModel;
 import com.sun.java.swing.plaf.windows.WindowsBorders.ToolBarBorder;
 
@@ -55,7 +56,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.JCheckBoxMenuItem;
 
 import java.awt.event.MouseMotionAdapter;
+
 import javax.swing.JTabbedPane;
+
 import java.awt.ComponentOrientation;
 
 public class SimpleChatFrameClient extends JFrame {
@@ -91,7 +94,7 @@ public class SimpleChatFrameClient extends JFrame {
 
 		Scanner sc=new Scanner(System.in);
 		String line=""; //$NON-NLS-1$
-		while(!line.equals(".bye")){ //$NON-NLS-1$
+		while(!line.equals(IfClientServerProtocol.BYE)){ //$NON-NLS-1$
 			line=sc.nextLine();			
 		}
 	}

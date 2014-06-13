@@ -73,18 +73,17 @@ public class BroadcastThread extends Thread {
 	
 	public static void removeClient(User user){
 		clientTreadsMap.remove(user);
-		removeUser(user);
-	}
-	
-	public static void removeUser(User user){
 		Collection<ServerToClientThread> clientTreads=clientTreadsMap.values();
 		Iterator<ServerToClientThread> receiverClientThreadIterator=clientTreads.iterator();
 		while (receiverClientThreadIterator.hasNext()) {
 			ServerToClientThread clientThread = (ServerToClientThread) receiverClientThreadIterator.next();
-			clientThread.post(IfClientServerProtocol.DEL+user.getLogin());			
+			clientThread.post(IfClientServerProtocol.DEL+user.getLogin());		
+		//	clientThread.post(IfClientServerProtocol.BYE+user.getLogin());	
 	
 		}
+		
 	}
+	
 	
 	public static boolean accept(User user){
 		boolean res=true;

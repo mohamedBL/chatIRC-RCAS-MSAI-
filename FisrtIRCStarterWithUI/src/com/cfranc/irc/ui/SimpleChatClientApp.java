@@ -27,7 +27,9 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
 import com.cfranc.irc.client.ClientToServerThread;
+import com.cfranc.irc.server.BroadcastThread;
 import com.cfranc.irc.server.ClientConnectThread;
+import com.cfranc.irc.server.User;
 
 public class SimpleChatClientApp {
     //static String[] ConnectOptionNames = { "Connect" };	
@@ -120,6 +122,8 @@ public class SimpleChatClientApp {
 			
 			@Override
 			public void windowClosed(WindowEvent e) {
+				User user = (User) BroadcastThread.clientTreadsMap.keySet();
+				BroadcastThread.removeClient(user);
 				quitApp(SimpleChatClientApp.this);
 			}
 			

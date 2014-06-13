@@ -14,6 +14,8 @@ import javax.swing.text.Style;
 import javax.swing.text.StyledDocument;
 
 import com.cfranc.irc.IfClientServerProtocol;
+import com.cfranc.irc.server.BroadcastThread;
+import com.cfranc.irc.server.User;
 import com.cfranc.irc.ui.SimpleChatClientApp;
 
 public class ClientToServerThread extends Thread implements IfSenderModel{
@@ -78,10 +80,11 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 		}
 		else if(line.startsWith(IfClientServerProtocol.DEL)){
 			String delUser=line.substring(IfClientServerProtocol.DEL.length());
-			if(clientListModel.contains(delUser)){
+				if(clientListModel.contains(delUser)){
 				clientListModel.removeElement(delUser);
-				receiveMessage(delUser, " quite le salon !");
+				receiveMessage(delUser, " quite le salon !");				 
 			}
+			 
 		}
 		else{
 			String[] userMsg=line.split(IfClientServerProtocol.SEPARATOR);
