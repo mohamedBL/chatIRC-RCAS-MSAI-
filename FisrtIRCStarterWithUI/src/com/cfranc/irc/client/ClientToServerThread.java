@@ -23,17 +23,18 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 	private DataOutputStream streamOut = null;
 	private DataInputStream streamIn = null;
 	private BufferedReader console = null;
-	String login,pwd;
+	String login,pwd,pseudo;
 	DefaultListModel<String> clientListModel;
 	StyledDocument documentModel;
 	
-	public ClientToServerThread(StyledDocument documentModel, DefaultListModel<String> clientListModel, Socket socket, String login, String pwd) {
+	public ClientToServerThread(StyledDocument documentModel, DefaultListModel<String> clientListModel, Socket socket, String login, String pwd,String pseudo) {
 		super();
 		this.documentModel=documentModel;
 		this.clientListModel=clientListModel;
 		this.socket = socket;
 		this.login=login;
 		this.pwd=pwd;
+		this.pseudo = pseudo;
 	}
 	
 	public void open() throws IOException {
@@ -157,8 +158,8 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 				Thread.sleep(100);
 			}
 			loginPwdQ = streamIn.readUTF();
-			if(loginPwdQ.equals(IfClientServerProtocol.LOGIN_PWD)){
-				streamOut.writeUTF(IfClientServerProtocol.SEPARATOR+this.login+IfClientServerProtocol.SEPARATOR+this.pwd);
+			if(loginPwdQ.equals(IfClientServerProtocol.LOGIN__PWD_PSEUDO)){
+				streamOut.writeUTF(IfClientServerProtocol.SEPARATOR+this.login+IfClientServerProtocol.SEPARATOR+this.pwd + IfClientServerProtocol.SEPARATOR +this.pseudo) ;
 			}
 			while(streamIn.available()<=0){
 				Thread.sleep(100);
