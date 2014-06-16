@@ -4,6 +4,7 @@ public class User {
 
 	private String login;
 	private String pwd;
+	private String pseudo;
 	
 	public String getLogin() {
 		return login;
@@ -18,10 +19,11 @@ public class User {
 		this.pwd = pwd;
 	}
 	
-	public User(String login, String pwd) {
+	public User(String login, String pwd, String pseudo) {
 		super();
 		this.login = login;
 		this.pwd = pwd;
+		this.pseudo = pseudo;
 	}	
 	
 }

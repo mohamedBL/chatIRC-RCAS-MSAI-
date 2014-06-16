@@ -72,15 +72,17 @@ public class ClientConnectThread extends Thread implements IfClientServerProtoco
 		// Read user login and pwd
 		DataInputStream dis=new DataInputStream(socket.getInputStream());
 		DataOutputStream dos=new DataOutputStream(socket.getOutputStream());
-		dos.writeUTF(LOGIN_PWD);
+		dos.writeUTF(LOGIN__PWD_PSEUDO);
 		while(dis.available()<=0){
 			Thread.sleep(100);
 		}
 		String reponse=dis.readUTF();//lit qqc
 		String[] userPwd=reponse.split(SEPARATOR);
+		System.out.println(userPwd[0]+userPwd[1] + userPwd[2]);
 		String login=userPwd[1];
 		String pwd=userPwd[2];
-		User newUser=new User(login, pwd);
+		String pseudo = userPwd[3];
+		User newUser=new User(login, pwd,pseudo);
 		boolean isUserOK=authentication(newUser);
 		if(isUserOK){
 			

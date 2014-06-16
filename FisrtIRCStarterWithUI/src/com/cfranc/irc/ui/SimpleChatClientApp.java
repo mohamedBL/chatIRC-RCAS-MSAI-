@@ -1,6 +1,7 @@
 package com.cfranc.irc.ui;
 
 import java.awt.Color;
+import java.awt.Event;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,7 @@ import java.util.Scanner;
 import javax.sql.ConnectionEventListener;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -28,26 +30,28 @@ import javax.swing.text.StyledDocument;
 
 import com.cfranc.irc.client.ClientToServerThread;
 import com.cfranc.irc.server.ClientConnectThread;
+//import com.cfranc.msai.TablePane;
 
 public class SimpleChatClientApp {
     //static String[] ConnectOptionNames = { "Connect" };	
-	static JButton creer = new JButton("Créer Compte");
-	static JButton connecter = new JButton(" connecter");
-    static JButton[] ConnectOptionNames ={creer,connecter};
+	//static JButton creer = new JButton("Créer Compte");
+	//static JButton connecter = new JButton(" connecter");
+   // static JButton[] ConnectOptionNames ={creer,connecter};
 
     static String   ConnectTitle = "Connection Information";
-    Socket socketClientServer;
-    int serverPort;
-    String serverName;
-    String clientName;
-    String clientPwd;
-    
-	private SimpleChatFrameClient frame;
-	public StyledDocument documentModel=new DefaultStyledDocument();
-	DefaultListModel<String> clientListModel=new DefaultListModel<String>();
+    static Socket socketClientServer;
+    public static int serverPort  ; 
+    public static String serverName ;
+    static String clientName;
+    static String clientPwd;
+    static String pseudo;
+	private static SimpleChatFrameClient frame;
+	public static StyledDocument documentModel=new DefaultStyledDocument();
+	static DefaultListModel<String> clientListModel=new DefaultListModel<String>();
 	
     public static final String BOLD_ITALIC = "BoldItalic";
     public static final String GRAY_PLAIN = "Gray";
+	protected static final String app2 = null;
         
 	public static DefaultStyledDocument defaultDocumentModel() {
 		DefaultStyledDocument res=new DefaultStyledDocument();
@@ -75,18 +79,24 @@ public class SimpleChatClientApp {
 		
 	}
 	
-	public void displayClient() {
+	public static void displayClient() {
 		
 		// Init GUI
-		this.frame=new SimpleChatFrameClient(clientToServerThread, clientListModel, documentModel);
-		this.frame.setTitle(this.frame.getTitle()+" : "+clientName+" connected to "+serverName+":"+serverPort);
-		((JFrame)this.frame).setVisible(true);
+		clientName = FenetreConnection.getNom().getText();
+		clientPwd = FenetreConnection.getPassword().getText();
+		pseudo = FenetreConnection.getPseudo().getText();
+		serverName = FenetreConnection.getServeur().getText();
+		serverPort = FenetreConnection.getPort();
+		
+	SimpleChatClientApp.frame=new SimpleChatFrameClient(clientToServerThread, clientListModel, documentModel);
+		SimpleChatClientApp.frame.setTitle(SimpleChatClientApp.frame.getTitle()+" : "+pseudo+" connected to "+serverName+":"+serverPort);
+		((JFrame)SimpleChatClientApp.frame).setVisible(true);
 
 		
 		
 			
 
-		this.frame.addWindowListener(new WindowListener() {
+		SimpleChatClientApp.frame.addWindowListener(new WindowListener() {
 			
 			@Override
 			public void windowOpened(WindowEvent e) {
@@ -120,7 +130,7 @@ public class SimpleChatClientApp {
 			
 			@Override
 			public void windowClosed(WindowEvent e) {
-				quitApp(SimpleChatClientApp.this);
+				//quitApp(SimpleChatClientApp.this);
 			}
 			
 			@Override
@@ -138,72 +148,85 @@ public class SimpleChatClientApp {
 	}
 	
     void displayConnectionDialog() {
-    	//Custom button text
-    	creer.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				  
-			
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				System.out.println("toto");
-				JFrame frameMsai = new JFrame();
-				JPanel panel = new JPanel();
-				frameMsai.add(panel);
-				JButton monbouton = new JButton();
-				panel.add(monbouton);
-				frameMsai.setVisible(true);
-				
-			}
-		}) ;
-
-    	ConnectionPanel connectionPanel=new ConnectionPanel();
-//    	int result = JOptionPane.showOptionDialog(null, connectionPanel, ConnectTitle,JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,null, ConnectOptionNames ,null);
-//    	System.out.println(result);
-		if (JOptionPane.showOptionDialog(null, connectionPanel, ConnectTitle,JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,null, ConnectOptionNames ,ConnectOptionNames [1]) == 1);// ) 
-		//if(result == 1){
-			//System.out.println("toto");
-		{
-		
-			serverPort=Integer.parseInt(connectionPanel.getServerPortField().getText());
-			serverName=connectionPanel.getServerField().getText();
-			clientName=connectionPanel.getUserNameField().getText();
-			clientPwd=connectionPanel.getPasswordField().getText();
-		}
-
-
-	}
+    	FenetreConnection fenconnect = new FenetreConnection();
+    	fenconnect.setVisible(true);
+    	
+    }
+//    	//Custom button text
+//    	creer.addMouseListener(new MouseListener() {
+//			
+//			@Override
+//			public void mouseReleased(MouseEvent e) {
+//				// TODO Auto-generated method stub
+//				  
+//			
+//				
+//			}
+//			
+//			@Override
+//			public void mousePressed(MouseEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void mouseExited(MouseEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void mouseEntered(MouseEvent e) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				// TODO Auto-generated method stub
+//				System.out.println("on ouvre la fenetre de creation de compte");
+//				TablePane window = new TablePane();
+//				window.getFrame().setVisible(true);
+//					
+//				
+//			}
+//		}) ;
+//
+//    	ConnectionPanel connectionPanel=new ConnectionPanel();
+////    	int result = JOptionPane.showOptionDialog(null, connectionPanel, ConnectTitle,JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,null, ConnectOptionNames ,null);
+////    	System.out.println(result);
+//    	
+//		if (JOptionPane.showOptionDialog(null, connectionPanel, ConnectTitle,JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,null, ConnectOptionNames ,ConnectOptionNames [0]) == 1);// ) 
+//		//if(result == 1){
+//			//System.out.println("toto");
+//		{
+//		
+//			serverPort=Integer.parseInt(connectionPanel.getServerPortField().getText());
+//			serverName=connectionPanel.getServerField().getText();
+//			clientName=connectionPanel.getUserNameField().getText();
+//			clientPwd=connectionPanel.getPasswordField().getText();
+//		}
+//
+//
+//	}
     
-    private void connectClient() {
+    public static void connectClient() {
 		System.out.println("Establishing connection. Please wait ...");
 		try {
-			socketClientServer = new Socket(this.serverName, this.serverPort);
+			// Init GUI
+			clientName = FenetreConnection.getNom().getText();
+			clientPwd = FenetreConnection.getPassword().getText();
+			pseudo = FenetreConnection.getPseudo().getText();
+			serverName = FenetreConnection.getServeur().getText();
+			serverPort = FenetreConnection.getPort();
+			
+			System.out.println(FenetreConnection.getServeur().getText());
+			System.out.println(FenetreConnection.getPort());
+			//socketClientServer = new Socket(serverName, serverPort);
+			socketClientServer = new Socket(FenetreConnection.getServeur().getText(), FenetreConnection.getPort());
+			System.out.println(socketClientServer);
 			// Start connection services
-			clientToServerThread=new ClientToServerThread(documentModel, clientListModel,socketClientServer,clientName, clientPwd);
+			clientToServerThread=new ClientToServerThread(documentModel, clientListModel,socketClientServer,clientName,clientPwd,pseudo );
 			clientToServerThread.start();
 
 			System.out.println("Connected: " + socketClientServer);
@@ -224,11 +247,15 @@ public class SimpleChatClientApp {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					app.displayConnectionDialog();
-
-					app.connectClient();
 					
-					app.displayClient();
+				
+					app.displayConnectionDialog();
+					
+		
+
+					//app.connectClient();
+					
+					//app.displayClient();
 
 				} catch (Exception e) {
 					e.printStackTrace();
