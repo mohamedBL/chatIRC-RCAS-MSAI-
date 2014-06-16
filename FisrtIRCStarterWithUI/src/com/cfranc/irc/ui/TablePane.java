@@ -104,7 +104,7 @@ public class TablePane extends JFrame {
 		grille.add(Tritre, gbc_Tritre);
 		Tritre.setLayout(new BorderLayout(0, 0));
 		//insertion de l'image
-		Icon image = new ImageIcon(".//images//tchat.jpg");
+		Icon image = new ImageIcon(".//resources//images//tchat.jpg");
 	
 		
 		JLabel lblImage = new JLabel("Creation de compte");
