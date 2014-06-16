@@ -130,7 +130,7 @@ public class SimpleChatClientApp {
 			
 			@Override
 			public void windowClosed(WindowEvent e) {
-				quitApp(SimpleChatClientApp.this);
+// TODO : a corriger				quitApp(SimpleChatClientApp.this);
 			}
 			
 			@Override
