@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cfranc.irc.IfClientServerProtocol;
+import com.cfranc.irc.ui.SimpleChatClientApp;
+import com.cfranc.irc.ui.SimpleChatFrameClient;
 
 public class ServerToClientThread extends Thread{
 	private User user;
@@ -68,6 +70,7 @@ public class ServerToClientThread extends Thread{
 						String login=userMsg[1];
 						String msg=userMsg[2];
 						done = line.endsWith(IfClientServerProtocol.BYE) || line.startsWith(IfClientServerProtocol.DEL);
+						System.out.println(line);
 						if(!done){
 							if(login.equals(user)){
 								System.err.println("ServerToClientThread::run(), login!=user"+login);
@@ -77,7 +80,7 @@ public class ServerToClientThread extends Thread{
 
 						}else {
 							BroadcastThread.removeClient(user);
-
+							
 						}
 					}
 					else{

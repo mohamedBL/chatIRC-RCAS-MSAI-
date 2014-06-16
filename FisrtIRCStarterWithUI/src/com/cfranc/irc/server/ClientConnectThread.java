@@ -80,6 +80,7 @@ public class ClientConnectThread extends Thread implements IfClientServerProtoco
 		String[] userPwd=reponse.split(SEPARATOR);
 		String login=userPwd[1];
 		String pwd=userPwd[2];
+		System.out.println("login : "+login + ", password :"+pwd);
 		User newUser=new User(login, pwd);
 		boolean isUserOK=authentication(newUser);
 		if(isUserOK){

@@ -117,13 +117,12 @@ public class SimpleChatClientApp {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				// TODO Auto-generated method stub
-				
+	//			System.out.println("toto");
 			}
 			
 			@Override
 			public void windowClosed(WindowEvent e) {
-				User user = (User) BroadcastThread.clientTreadsMap.keySet();
-				BroadcastThread.removeClient(user);
+	//			System.out.println("toto");
 				quitApp(SimpleChatClientApp.this);
 			}
 			
@@ -251,7 +250,7 @@ public class SimpleChatClientApp {
 		quitApp(app);
 	}
 
-	private static void quitApp(final SimpleChatClientApp app) {
+	public static void quitApp(final SimpleChatClientApp app) {
 		try {
 			app.clientToServerThread.quitServer();
 			app.socketClientServer.close();
