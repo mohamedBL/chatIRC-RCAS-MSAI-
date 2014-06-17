@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="resources/com"/>
+	<classpathentry kind="src" path="resources/prop"/>
 	<classpathentry kind="src" path="resources/images"/>
 	<classpathentry kind="src" path="resources/bdd"/>
-	<classpathentry excluding="com/|images/|bdd/" kind="src" path="resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
 	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.7.2.jar"/>
