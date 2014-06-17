@@ -35,9 +35,9 @@ public class BroadcastThread extends Thread {
 		Iterator<ServerToClientThread> receiverClientThreadIterator=clientTreads.iterator();
 		while (receiverClientThreadIterator.hasNext()) {
 			ServerToClientThread clientThread = (ServerToClientThread) receiverClientThreadIterator.next();
-//			clientThread.post("#"+sender.getLogin()+"#"+msg);		
-			clientThread.post(IfClientServerProtocol.SEPARATOR+sender.getLogin()+IfClientServerProtocol.SEPARATOR+msg);	
-			System.out.println("sendMessage : "+IfClientServerProtocol.SEPARATOR+sender.getLogin()+IfClientServerProtocol.SEPARATOR+msg);
+//			clientThread.post("#"+sender.getPseudo()+"#"+msg);		
+			clientThread.post(IfClientServerProtocol.SEPARATOR+sender.getPseudo()+IfClientServerProtocol.SEPARATOR+msg);	
+			System.out.println("sendMessage : "+IfClientServerProtocol.SEPARATOR+sender.getPseudo()+IfClientServerProtocol.SEPARATOR+msg);
 			
 		}
 	}
@@ -47,10 +47,10 @@ public class BroadcastThread extends Thread {
 		Iterator<ServerToClientThread> receiverClientThreadIterator=clientTreads.iterator();
 		while (receiverClientThreadIterator.hasNext()) {
 			ServerToClientThread clientThread = (ServerToClientThread) receiverClientThreadIterator.next();
-	//		clientThread.post("#+#"+sender.getLogin());		
-			clientThread.post(IfClientServerProtocol.ADD+sender.getLogin());
+	//		clientThread.post("#+#"+sender.getPseudo());		
+			clientThread.post(IfClientServerProtocol.ADD+sender.getPseudo());
 			//listeUserConnect();
-			System.out.println("Nouvel utilisateur"+IfClientServerProtocol.ADD+sender.getLogin());
+			System.out.println("Nouvel utilisateur"+IfClientServerProtocol.ADD+sender.getPseudo());
 		}
 	}
 	
@@ -66,7 +66,7 @@ public class BroadcastThread extends Thread {
 		
 			User currentUser= userThreadIterator.next();
 			// on envoi la valeur 
-			serverToClientThread.post(IfClientServerProtocol.ADD+currentUser.getLogin());
+			serverToClientThread.post(IfClientServerProtocol.ADD+currentUser.getPseudo());
 	}
 	}
 	
@@ -78,8 +78,8 @@ public class BroadcastThread extends Thread {
 		Iterator<ServerToClientThread> receiverClientThreadIterator=clientTreads.iterator();
 		while (receiverClientThreadIterator.hasNext()) {
 			ServerToClientThread clientThread = (ServerToClientThread) receiverClientThreadIterator.next();
-			clientThread.post(IfClientServerProtocol.DEL+user.getLogin());		
-		//	clientThread.post(IfClientServerProtocol.BYE+user.getLogin());	
+			clientThread.post(IfClientServerProtocol.DEL+user.getPseudo());		
+		//	clientThread.post(IfClientServerProtocol.BYE+user.getPseudo());	
 	
 		}
 		}

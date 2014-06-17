@@ -76,7 +76,10 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 			String newUser=line.substring(IfClientServerProtocol.ADD.length());
 			if(!clientListModel.contains(newUser)){
 				clientListModel.addElement(newUser);
+				if (!newUser.equals("")){
 				receiveMessage(newUser, " entre dans le salon...");
+				System.out.println("bonjour" + newUser);
+			}
 			}
 		}
 		else if(line.startsWith(IfClientServerProtocol.DEL)){
@@ -108,7 +111,8 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 	private boolean sendMsg() throws IOException{
 		boolean res=false;
 		if(msgToSend!=null){
-			streamOut.writeUTF("#"+login+"#"+msgToSend);
+			//streamOut.writeUTF("#"+login+"#"+msgToSend);
+			streamOut.writeUTF("#"+pseudo+"#"+msgToSend);
 			msgToSend=null;
 		    streamOut.flush();
 		    res=true;

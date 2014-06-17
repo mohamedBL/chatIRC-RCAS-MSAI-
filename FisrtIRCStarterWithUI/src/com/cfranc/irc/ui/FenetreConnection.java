@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
@@ -18,17 +19,36 @@ import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JRadioButton;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.awt.GridLayout;
+
+import javax.swing.JSplitPane;
+
+import java.awt.Color;
+
+import javax.swing.border.BevelBorder;
+import javax.swing.JPasswordField;
+
 public class FenetreConnection extends JFrame {
 
 	private JPanel contentPane;
-	private static JTextField textField;
-	private static JTextField textField_1;
-	private static JTextField textField_2;
-	private static JTextField textField_3;
-	private static JTextField textField_4;
+	private static JTextField textFirldport;
+	private static JTextField textFieldserveur;
+	private static JTextField textFieldpwd1;
+	private static JTextField textFieldpseudo;
+	private static JTextField textFieldnom1;
 	private JButton btnSeConnecter;
 	private JButton btnNewButton;
 	private JButton btnCrerCompte;
+	private JPasswordField textFieldpwd1_1;
+
 
 	/**
 	 * Launch the application.
@@ -50,10 +70,13 @@ public class FenetreConnection extends JFrame {
 	 * Create the frame.
 	 */
 	public FenetreConnection() {
+		setForeground(Color.GRAY);
+		setBackground(Color.GRAY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(Color.GRAY);
+		contentPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
@@ -72,109 +95,171 @@ public class FenetreConnection extends JFrame {
 		});
 		boutonbas.add(btnCrerCompte);
 		
-		btnSeConnecter = new JButton("Se connecter");
-		btnSeConnecter.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-			
-				SimpleChatClientApp.connectClient();
-			 SimpleChatClientApp.displayClient();
-			 FenetreConnection.this.dispose();
-			}
-		});
-		boutonbas.add(btnSeConnecter);
+		JPanel Titre = new JPanel();
+		contentPane.add(Titre, BorderLayout.NORTH);
 		
-		btnNewButton = new JButton("Quitter");
-		boutonbas.add(btnNewButton);
+		JLabel lblBienvenuSurLe = new JLabel("TCHAT IRC RCAS-MSAI");
+		lblBienvenuSurLe.setBackground(Color.BLACK);
+		lblBienvenuSurLe.setForeground(Color.ORANGE);
+		Titre.add(lblBienvenuSurLe);
+		
+		JPanel panneaumasque = new JPanel();
+		contentPane.add(panneaumasque, BorderLayout.WEST);
+		panneaumasque.setLayout(new BorderLayout(0, 0));
 		
 		JPanel formulaire = new JPanel();
 		contentPane.add(formulaire, BorderLayout.CENTER);
-		GridBagLayout gbl_Formulaire = new GridBagLayout();
-		gbl_Formulaire.columnWidths = new int[]{0, 0, 0, 0, 0, 0};
-		gbl_Formulaire.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_Formulaire.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		gbl_Formulaire.rowWeights = new double[]{0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
-		formulaire.setLayout(gbl_Formulaire);
+		formulaire.setLayout(new BorderLayout(0, 0));
 		
-		JPanel nom = new JPanel();
-		GridBagConstraints gbc_nom = new GridBagConstraints();
-		gbc_nom.insets = new Insets(0, 0, 5, 0);
-		gbc_nom.fill = GridBagConstraints.BOTH;
-		gbc_nom.gridx = 4;
-		gbc_nom.gridy = 2;
-		formulaire.add(nom, gbc_nom);
+		JPanel panel_1 = new JPanel();
+		formulaire.add(panel_1, BorderLayout.CENTER);
+		panel_1.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JLabel lblNom = new JLabel("Nom");
-		nom.add(lblNom);
+		JPanel nom_1 = new JPanel();
+		nom_1.setVisible(false);
+		panel_1.add(nom_1);
 		
-		textField_4 = new JTextField();
-		nom.add(textField_4);
-		textField_4.setColumns(10);
+		JLabel lblNom1 = new JLabel("Nom     ");
+		nom_1.add(lblNom1);
+		
+		textFieldnom1 = new JTextField();
+		nom_1.add(textFieldnom1);
+		textFieldnom1.setColumns(10);
+		
+		final JLabel lblNewLabel = new JLabel("");
+		nom_1.add(lblNewLabel);
+		
+		// ajout MSAI
+		btnSeConnecter = new JButton("Se connecter");
+		boutonbas.add(btnSeConnecter);
+		btnSeConnecter.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				try {
+			
+					ResultSet toto =ConnectDB.selectionnerUser();
+					if (toto == null){
+						System.out.println("On fait rien on laisse la fenetre ouverte");
+					}
+					
+					else {
+						//System.out.println(toto.getString(0));
+					
+					String pseudo=toto.getString(4);
+					String pwd = toto.getString(5);
+				//	System.out.println(tata);
+					//System.out.println(textFieldnom1.getText());
+					if (!textFieldpwd1.getText().equals(pwd)){
+						JOptionPane.showMessageDialog(FenetreConnection.this,"mot de passe incorrect","Erreur",JOptionPane.WARNING_MESSAGE);
+						//System.out.println(" vous n'avez pas de compte !");
+					}
+					else{
+				
+					SimpleChatClientApp.connectClient();
+					String textFieldnom1 = toto.getString(2);
+					 SimpleChatClientApp.displayClient();
+					 FenetreConnection.this.dispose();
+				}
+					}
+				}catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				
+			}
+		});
+		
+		
+		
+		btnNewButton = new JButton("Quitter");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				FenetreConnection.this.dispose();
+			}
+		});
+		boutonbas.add(btnNewButton);
+		
 		
 		JPanel pseudo = new JPanel();
-		GridBagConstraints gbc_pseudo = new GridBagConstraints();
-		gbc_pseudo.insets = new Insets(0, 0, 5, 0);
-		gbc_pseudo.fill = GridBagConstraints.BOTH;
-		gbc_pseudo.gridx = 4;
-		gbc_pseudo.gridy = 3;
-		formulaire.add(pseudo, gbc_pseudo);
+		panel_1.add(pseudo);
 		
-		JLabel lblPseudo = new JLabel("Pseudo");
+		JLabel lblPseudo = new JLabel("Pseudo  ");
 		pseudo.add(lblPseudo);
 		
-		textField_3 = new JTextField();
-		pseudo.add(textField_3);
-		textField_3.setColumns(10);
+		textFieldpseudo = new JTextField();
+		pseudo.add(textFieldpseudo);
+		textFieldpseudo.setColumns(10);
 		
 		JPanel password = new JPanel();
-		GridBagConstraints gbc_password = new GridBagConstraints();
-		gbc_password.insets = new Insets(0, 0, 5, 0);
-		gbc_password.fill = GridBagConstraints.BOTH;
-		gbc_password.gridx = 4;
-		gbc_password.gridy = 4;
-		formulaire.add(password, gbc_password);
+		panel_1.add(password);
 		
 		JLabel lblPassword = new JLabel("Password");
 		password.add(lblPassword);
 		
-		textField_2 = new JTextField();
-		password.add(textField_2);
-		textField_2.setColumns(10);
+		textFieldpwd1 = new JPasswordField();
+		password.add(textFieldpwd1);
 		
-		JPanel serveur = new JPanel();
-		GridBagConstraints gbc_serveur = new GridBagConstraints();
-		gbc_serveur.insets = new Insets(0, 0, 5, 0);
-		gbc_serveur.fill = GridBagConstraints.BOTH;
-		gbc_serveur.gridx = 4;
-		gbc_serveur.gridy = 5;
-		formulaire.add(serveur, gbc_serveur);
+//		textFieldpwd1 = new JTextField();
+//		password.add(textFieldpwd1);
+		textFieldpwd1.setColumns(10);
 		
-		JLabel lblServeur = new JLabel("Serveur");
-		serveur.add(lblServeur);
+		JPanel panel = new JPanel();
+		panel_1.add(panel);
 		
-		textField_1 = new JTextField();
-		serveur.add(textField_1);
-		textField_1.setColumns(10);
+		final JRadioButton rdbtnAvanc = new JRadioButton("avanc\u00E9");
+		panel.add(rdbtnAvanc);
+		
+		final JPanel formulairemasque = new JPanel();
+		panel.add(formulairemasque);
+		formulairemasque.setVisible(false);
 		
 		JPanel port = new JPanel();
-		GridBagConstraints gbc_port = new GridBagConstraints();
-		gbc_port.fill = GridBagConstraints.BOTH;
-		gbc_port.gridx = 4;
-		gbc_port.gridy = 6;
-		formulaire.add(port, gbc_port);
+		formulairemasque.add(port);
 		
 		JLabel lblPort = new JLabel("Port");
 		port.add(lblPort);
 		
-		textField = new JTextField();
-		port.add(textField);
-		textField.setColumns(10);
+		textFirldport = new JTextField();
+		textFirldport.setText("4567");
+		port.add(textFirldport);
+		textFirldport.setColumns(10);
 		
-		JPanel Titre = new JPanel();
-		contentPane.add(Titre, BorderLayout.NORTH);
+		JPanel serveur = new JPanel();
+		formulairemasque.add(serveur);
 		
-		JLabel lblBienvenuSurLe = new JLabel("bienvenu sur le tchat");
-		Titre.add(lblBienvenuSurLe);
+		JLabel lblServeur = new JLabel("Serveur");
+		serveur.add(lblServeur);
+		
+		textFieldserveur = new JTextField();
+		textFieldserveur.setText("localhost");
+		serveur.add(textFieldserveur);
+		textFieldserveur.setColumns(10);
+		rdbtnAvanc.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(rdbtnAvanc.isSelected()== true)
+				{
+			
+					formulairemasque.setVisible(true);
+				
+				
+				
+				}
+				else {
+						formulairemasque.setVisible(false);
+					
+					} 
+				}
+				
+				
+					
+			
+				
+			}
+		);
+		
 	}
 
 	public JButton getBtnSeConnecter() {
@@ -190,15 +275,15 @@ public class FenetreConnection extends JFrame {
 		return 4567;
 	}
 	public static JTextField getServeur() {
-		return textField_1;
+		return textFieldserveur;
 	}
 	public static JTextField getNom() {
-		return textField_4;
+		return textFieldnom1;
 	}
 	public static JTextField getPseudo() {
-		return textField_3;
+		return textFieldpseudo;
 	}
 	public static JTextField getPassword() {
-		return textField_2;
+		return textFieldpwd1;
 	}
 }

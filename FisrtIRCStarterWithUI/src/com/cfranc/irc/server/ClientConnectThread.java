@@ -83,6 +83,7 @@ public class ClientConnectThread extends Thread implements IfClientServerProtoco
 		String pwd=userPwd[2];
 		String pseudo = userPwd[3];
 		User newUser=new User(login, pwd,pseudo);
+		
 		boolean isUserOK=authentication(newUser);
 		if(isUserOK){
 			
@@ -95,7 +96,7 @@ public class ClientConnectThread extends Thread implements IfClientServerProtoco
 				
 				//MSAI on ajoute le nom du user dans la liste  de gauche coté ihm serveur
 				
-				((DefaultMutableTreeNode)clientTreeModel.getRoot()).add(new DefaultMutableTreeNode(newUser.getLogin()));
+				((DefaultMutableTreeNode)clientTreeModel.getRoot()).add(new DefaultMutableTreeNode(newUser.getPseudo()));
 				((DefaultTreeModel)clientTreeModel).reload();
 				dos.writeUTF(ADD+login);
 			}

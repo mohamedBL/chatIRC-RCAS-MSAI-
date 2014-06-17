@@ -9,6 +9,10 @@ public class User {
 	public String getLogin() {
 		return login;
 	}
+	
+	public String getPseudo() {
+		return pseudo;
+	}
 	public void setLogin(String login) {
 		this.login = login;
 	}
@@ -20,6 +24,7 @@ public class User {
 	}
 	
 	public User(String login, String pwd, String pseudo) {
+	
 		super();
 		this.login = login;
 		this.pwd = pwd;
