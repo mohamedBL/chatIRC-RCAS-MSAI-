@@ -80,6 +80,7 @@ public class SimpleChatFrameClient extends JFrame {
 	private final ResourceAction lockAction = new LockAction();
 
 	private boolean isScrollLocked = true;
+	private static JTextPane textArea;
 
 	/**
 	 * Launch the application.
@@ -129,7 +130,14 @@ public class SimpleChatFrameClient extends JFrame {
 		if (textField.getText().equals(line1[1])) {
 			this.dispose();
 		}
+		
+		
 	}
+	
+	
+
+
+	
 
 	public SimpleChatFrameClient() {
 		this(null, new DefaultListModel<String>(), SimpleChatClientApp
@@ -205,7 +213,7 @@ public class SimpleChatFrameClient extends JFrame {
 		});
 		list.setMinimumSize(new Dimension(100, 0));
 		splitPane.setLeftComponent(list);
-		JTextPane textArea = new JTextPane((StyledDocument) documentModel);
+		textArea = new JTextPane((StyledDocument) documentModel);
 		textArea.setEnabled(false);
 		JScrollPane scrollPaneText = new JScrollPane(textArea);
 		// MSAI on crée le tabbedPane
@@ -216,7 +224,7 @@ public class SimpleChatFrameClient extends JFrame {
 		// MSAI on place le tabbedPane a droite du splitPane
 
 		splitPane.setRightComponent(tabbedPane);
-
+		
 		scrollPaneText.getVerticalScrollBar().addAdjustmentListener(
 				new AdjustmentListener() {
 
@@ -321,6 +329,10 @@ public class SimpleChatFrameClient extends JFrame {
 	//	ECOUTE POUR FERMER LA FENETRE
 		this.addWindowListener(new MyWindowListener());
 	}
+	
+	
+	
+	
 
 	public JLabel getLblSender() {
 		return lblSender;
@@ -380,6 +392,14 @@ public class SimpleChatFrameClient extends JFrame {
 			}
 		});
 
+	}
+	
+	public static JTextPane getTextArea() {
+		return textArea;
+	}
+
+	public void setTextArea(JTextPane textArea) {
+		this.textArea = textArea;
 	}
 }
 
