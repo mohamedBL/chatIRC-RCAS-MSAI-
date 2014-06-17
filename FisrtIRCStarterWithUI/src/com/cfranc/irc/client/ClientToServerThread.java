@@ -9,14 +9,19 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import com.cfranc.irc.IfClientServerProtocol;
 import com.cfranc.irc.server.BroadcastThread;
 import com.cfranc.irc.server.User;
+import com.cfranc.irc.ui.Messages;
 import com.cfranc.irc.ui.SimpleChatClientApp;
+import com.cfranc.irc.ui.SimpleChatFrameClient;
 
 public class ClientToServerThread extends Thread implements IfSenderModel{
 	private Socket socket = null;
@@ -26,7 +31,7 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 	String login,pwd,pseudo;
 	DefaultListModel<String> clientListModel;
 	StyledDocument documentModel;
-	
+
 	public ClientToServerThread(StyledDocument documentModel, DefaultListModel<String> clientListModel, Socket socket, String login, String pwd,String pseudo) {
 		super();
 		this.documentModel=documentModel;
@@ -36,7 +41,7 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 		this.pwd=pwd;
 		this.pseudo = pseudo;
 	}
-	
+
 	public void open() throws IOException {
 		console = new BufferedReader(new InputStreamReader(System.in));
 		streamIn = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
@@ -50,28 +55,42 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 		if (streamOut != null)
 			streamOut.close();
 	}
-	
+
 	public void receiveMessage(String user, String line){
 		Style styleBI = ((StyledDocument)documentModel).getStyle(SimpleChatClientApp.BOLD_ITALIC);
-        Style styleGP = ((StyledDocument)documentModel).getStyle(SimpleChatClientApp.GRAY_PLAIN);
-        receiveMessage(user, line, styleBI, styleGP);
+		Style styleGP = ((StyledDocument)documentModel).getStyle(SimpleChatClientApp.GRAY_PLAIN);
+		receiveMessage(user, line, styleBI, styleGP);
 	}
-	
+
 	public void receiveMessage(String user, String line, Style styleBI,
 			Style styleGP) {
-        try {        	
+		try {        	
 			documentModel.insertString(documentModel.getLength(), user+" : ", styleBI);
-			documentModel.insertString(documentModel.getLength(), line+"\n", styleGP);
+
+
+			if (line.equals(":)") || line.equals(":(") || line.equals(";)")) {
+		
+				documentModel.insertString(documentModel.getLength(), "\n", styleGP);
+				
+				documentModel.insertString(documentModel.getLength(), "\n", styleGP);
+				Icon icon=Messages.insertionIcon(line);
+				SimpleChatFrameClient.getTextArea().insertIcon(icon);
+
+			} else {
+				documentModel.insertString(documentModel.getLength(), line+"\n", styleGP);				
+			}
+
+
 		} catch (BadLocationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}				        	
 	}
-    
+
 	void readMsg() throws IOException{
 		String line = streamIn.readUTF();
-//		System.out.println(line);
-		
+		//		System.out.println(line);
+
 		if(line.startsWith(IfClientServerProtocol.ADD)){
 			String newUser=line.substring(IfClientServerProtocol.ADD.length());
 			if(!clientListModel.contains(newUser)){
@@ -84,12 +103,12 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 		}
 		else if(line.startsWith(IfClientServerProtocol.DEL)){
 			String delUser=line.substring(IfClientServerProtocol.DEL.length());
-				if(clientListModel.contains(delUser)){
+			if(clientListModel.contains(delUser)){
 				clientListModel.removeElement(delUser);
 				receiveMessage(delUser, " quite le salon !");	
-				
+
 			}
-			 
+
 		}
 		else{
 			String[] userMsg=line.split(IfClientServerProtocol.SEPARATOR);
@@ -97,9 +116,9 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 			receiveMessage(user, userMsg[2]);
 		}
 	}
-	
+
 	String msgToSend=null;
-	
+
 	/* (non-Javadoc)
 	 * @see com.cfranc.irc.client.IfSenderModel#setMsgToSend(java.lang.String)
 	 */
@@ -114,18 +133,18 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 			//streamOut.writeUTF("#"+login+"#"+msgToSend);
 			streamOut.writeUTF("#"+pseudo+"#"+msgToSend);
 			msgToSend=null;
-		    streamOut.flush();
-		    res=true;
+			streamOut.flush();
+			res=true;
 		}
 		return res;
 	}
-	
+
 	public void quitServer() throws IOException{
 		streamOut.writeUTF(IfClientServerProtocol.DEL+login);
 		streamOut.flush();
 		done=true;
 	}
-	
+
 	boolean done;
 	@Override
 	public void run() {
@@ -153,7 +172,7 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 			e.printStackTrace();
 		}
 	}
-	
+
 	private boolean authentification() {
 		boolean res=false;
 		String loginPwdQ;
@@ -182,6 +201,6 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 		}
 		return res;		
 	}
-	
+
 }
 
