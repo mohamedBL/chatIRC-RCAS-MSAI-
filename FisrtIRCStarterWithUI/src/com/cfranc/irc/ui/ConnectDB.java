@@ -45,7 +45,7 @@ public class ConnectDB extends JFrame{
 	}
 	//public static void ajoutUser(Connection connection) throws SQLException {
 		public static void ajoutUser() throws SQLException {
-		connectionDB("D://BDDChatIrc//ChatIrc.sqlite");
+		connectionDB(".//resources//bdd//ChatIrc.sqlite");
 		Statement statement = connection.createStatement();
 		statement.setQueryTimeout(30);
 		
@@ -78,7 +78,7 @@ public static void modifierUser(Connection connection) throws SQLException {
 		}
 		
 public static ResultSet selectionnerUser() throws SQLException {
-	connectionDB("D://BDDChatIrc//ChatIrc.sqlite");
+	connectionDB(".//resources//bdd//ChatIrc.sqlite");
 	Statement statement = connection.createStatement();
 	statement.setQueryTimeout(30);
 	// modifier un user dans la table Utilisateur
