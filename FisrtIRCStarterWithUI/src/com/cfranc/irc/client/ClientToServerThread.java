@@ -68,17 +68,17 @@ public class ClientToServerThread extends Thread implements IfSenderModel{
 			documentModel.insertString(documentModel.getLength(), user+" : ", styleBI);
 
 
-			if (line.equals(":)") || line.equals(":(") || line.equals(";)")) {
-		
-				documentModel.insertString(documentModel.getLength(), "\n", styleGP);
-				
-				documentModel.insertString(documentModel.getLength(), "\n", styleGP);
-				Icon icon=Messages.insertionIcon(line);
-				SimpleChatFrameClient.getTextArea().insertIcon(icon);
-
-			} else {
+//			if (line.equals(":)") || line.equals(":(") || line.equals(";)")) {
+//		
+//				documentModel.insertString(documentModel.getLength(), "\n", styleGP);
+//				
+//				documentModel.insertString(documentModel.getLength(), "\n", styleGP);
+//				Icon icon=Messages.insertionIcon(line);
+//				SimpleChatFrameClient.getTextArea().insertIcon(icon);
+//
+//			} else {
 				documentModel.insertString(documentModel.getLength(), line+"\n", styleGP);				
-			}
+//			}
 
 
 		} catch (BadLocationException e1) {

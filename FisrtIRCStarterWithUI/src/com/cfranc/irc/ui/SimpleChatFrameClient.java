@@ -238,7 +238,7 @@ public class SimpleChatFrameClient extends JFrame {
                                 while(i>=0) {
                                     final SimpleAttributeSet attrs=new SimpleAttributeSet(doc.getCharacterElement(start+i).getAttributes());
                                     if (StyleConstants.getIcon(attrs)==null) {
-                                        StyleConstants.setIcon(attrs, new ImageIcon(".//resources//images//content.gif"));
+                                    	StyleConstants.setIcon(attrs, Messages.insertionIcon(":)"));
                                         doc.remove(start+i, 2);
                                         doc.insertString(start+i,":)", attrs);
                                     }
@@ -248,13 +248,22 @@ public class SimpleChatFrameClient extends JFrame {
                                 while(i1>=0) {
                                     final SimpleAttributeSet attrs=new SimpleAttributeSet(doc.getCharacterElement(start+i1).getAttributes());
                                     if (StyleConstants.getIcon(attrs)==null) {
-                                        StyleConstants.setIcon(attrs, new ImageIcon(".//resources//images//colere.gif"));
+                                    	StyleConstants.setIcon(attrs, Messages.insertionIcon(":("));
                                         doc.remove(start+i1, 2);
                                         doc.insertString(start+i1,":(", attrs);
                                     }
                                     i1=text.indexOf(":(", i1+2);
                                 }   
-                                
+                                int i2=text.indexOf(";)");
+                                while(i2>=0) {
+                                    final SimpleAttributeSet attrs=new SimpleAttributeSet(doc.getCharacterElement(start+i2).getAttributes());
+                                    if (StyleConstants.getIcon(attrs)==null) {
+                                    	StyleConstants.setIcon(attrs, Messages.insertionIcon(";)"));
+                                        doc.remove(start+i2, 2);
+                                        doc.insertString(start+i2,";)", attrs);
+                                    }
+                                    i2=text.indexOf(";)", i2+2);
+                                }   
                                 
                             } catch (BadLocationException e1) {
                                 e1.printStackTrace();
