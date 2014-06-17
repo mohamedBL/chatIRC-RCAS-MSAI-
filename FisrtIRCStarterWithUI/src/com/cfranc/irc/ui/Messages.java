@@ -5,6 +5,10 @@ import java.util.ResourceBundle;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 public class Messages {
 	private static final String BUNDLE_NAME = "com.cfranc.irc.ui.messages"; //$NON-NLS-1$
@@ -23,9 +27,22 @@ public class Messages {
 		}
 	}
 	
+	public static void generationIcone(StyledDocument doc, int start,
+			String text, String emo)
+			throws BadLocationException {
+		int i=text.indexOf(emo);
+		while(i>=0) {
+		    final SimpleAttributeSet attrs=new SimpleAttributeSet(doc.getCharacterElement(start+i).getAttributes());
+		    if (StyleConstants.getIcon(attrs)==null) {
+		    	StyleConstants.setIcon(attrs, Messages.selectionIcon(emo));
+		        doc.remove(start+i, 2);
+		        doc.insertString(start+i,emo, attrs);
+		    }
+		    i=text.indexOf(emo, i+2);
+		 }
+	}
 	
-	
-	public static Icon insertionIcon(String emo) {
+	public static Icon selectionIcon(String emo) {
 		String retour="";
 		
 		if (emo.equals(":)")) {
