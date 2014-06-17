@@ -37,13 +37,19 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import javax.swing.text.Utilities;
 
 import com.cfranc.irc.IfClientServerProtocol;
 import com.cfranc.irc.client.ClientToServerThread;
@@ -215,6 +221,72 @@ public class SimpleChatFrameClient extends JFrame {
 		splitPane.setLeftComponent(list);
 		textArea = new JTextPane((StyledDocument) documentModel);
 		textArea.setEnabled(false);
+		
+		documentModel.addDocumentListener(new DocumentListener(){
+            public void insertUpdate(DocumentEvent event) {
+                final DocumentEvent e=event;
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        if (e.getDocument() instanceof StyledDocument) {
+                            try {
+                                StyledDocument doc=(StyledDocument) e.getDocument();
+                                int start= Utilities.getRowStart(textArea,Math.max(0,e.getOffset()-1));
+                                int end=Utilities.getWordStart(textArea,e.getOffset()+e.getLength());
+                                String text=doc.getText(start, end-start);
+ 
+                                int i=text.indexOf(":)");
+                                while(i>=0) {
+                                    final SimpleAttributeSet attrs=new SimpleAttributeSet(doc.getCharacterElement(start+i).getAttributes());
+                                    if (StyleConstants.getIcon(attrs)==null) {
+                                    	StyleConstants.setIcon(attrs, Messages.insertionIcon(":)"));
+                                        doc.remove(start+i, 2);
+                                        doc.insertString(start+i,":)", attrs);
+                                    }
+                                    i=text.indexOf(":)", i+2);
+                                 }
+                                int i1=text.indexOf(":(");
+                                while(i1>=0) {
+                                    final SimpleAttributeSet attrs=new SimpleAttributeSet(doc.getCharacterElement(start+i1).getAttributes());
+                                    if (StyleConstants.getIcon(attrs)==null) {
+                                    	StyleConstants.setIcon(attrs, Messages.insertionIcon(":("));
+                                        doc.remove(start+i1, 2);
+                                        doc.insertString(start+i1,":(", attrs);
+                                    }
+                                    i1=text.indexOf(":(", i1+2);
+                                }   
+                                int i2=text.indexOf(";)");
+                                while(i2>=0) {
+                                    final SimpleAttributeSet attrs=new SimpleAttributeSet(doc.getCharacterElement(start+i2).getAttributes());
+                                    if (StyleConstants.getIcon(attrs)==null) {
+                                    	StyleConstants.setIcon(attrs, Messages.insertionIcon(";)"));
+                                        doc.remove(start+i2, 2);
+                                        doc.insertString(start+i2,";)", attrs);
+                                    }
+                                    i2=text.indexOf(";)", i2+2);
+                                }   
+                                
+                            } catch (BadLocationException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }
+                });
+            }
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+         
+        });
+		
 		JScrollPane scrollPaneText = new JScrollPane(textArea);
 		// MSAI on crée le tabbedPane
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
